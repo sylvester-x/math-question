@@ -1,0 +1,49 @@
+.settings {
+  margin-bottom: 24px;
+}
+
+.actions {
+  margin-top: 24px;
+}
+
+.test-results {
+  text-align: center;
+
+  .view-toggle {
+    margin-bottom: 24px;
+  }
+
+  .score {
+    font-size: 1.5em;
+    margin: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+}
+
+.questions-review {
+  margin: 24px 0;
+}
+
+.previous-scores {
+  margin-top: 24px;
+
+  .score-date {
+    color: rgba(0, 0, 0, 0.54);
+  }
+}
+
+.user-answer {
+  margin: 0 8px;
+  font-weight: bold;
+
+  &.correct {
+    color: #4caf50;
+  }
+
+  &.incorrect {
+    color: #f44336;
+  }
+}

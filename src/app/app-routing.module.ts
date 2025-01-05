@@ -5,6 +5,7 @@ import { MinusComponent } from './minus/minus.component';
 import { MultipleComponent } from './multiple/multiple.component';
 import { AddComponent } from './add/add.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { MixMathComponent } from './mix-math/mix-math.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
   {
     path: 'divide',
     component: DivideComponent
+  },
+  {
+    path: 'mix',
+    component: MixMathComponent
   }
 ];
 

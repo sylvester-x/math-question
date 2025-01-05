@@ -1,0 +1,139 @@
+<mat-card class="math-card">
+  <mat-card-header>
+    <mat-card-title>Mixed Operations Practice Test</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="settings" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+      <mat-form-field appearance="outline">
+        <mat-label>Number of Digits</mat-label>
+        <mat-select [(ngModel)]="digitCount" (selectionChange)="onSettingsChange()">
+          <mat-option *ngFor="let count of availableDigits" [value]="count">
+            {{ count }} {{ count === 1 ? 'digit' : 'digits' }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Number of Questions</mat-label>
+        <mat-select [(ngModel)]="questionCount" (selectionChange)="onSettingsChange()">
+          <mat-option *ngFor="let count of availableQuestionCounts" [value]="count"> {{ count }} questions </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Operations</mat-label>
+        <mat-select [(ngModel)]="selectedOperations" multiple (selectionChange)="onSettingsChange()">
+          <mat-option value="+">Addition (+)</mat-option>
+          <mat-option value="-">Subtraction (-)</mat-option>
+          <mat-option value="×">Multiplication (×)</mat-option>
+          <mat-option value="÷">Division (÷)</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="questions-list" *ngIf="!testCompleted">
+      <div class="question-item" *ngFor="let question of questions; let i = index">
+        <div class="question-number">{{ i + 1 }}.</div>
+        <div class="math-problem" fxLayout="row" fxLayoutAlign="start center">
+          <ng-container *ngFor="let part of question.sequence; let isLast = last">
+            <span class="number" *ngIf="part.type === 'number'">{{ part.value }}</span>
+            <span class="operator" *ngIf="part.type === 'operator'">{{ part.value }}</span>
+            <ng-container *ngIf="isLast">
+              <span class="equals">=</span>
+              <mat-form-field appearance="outline">
+                <input
+                  matInput
+                  appOnlyNumber
+                  [(ngModel)]="question.userAnswer"
+                  [disabled]="question?.isCorrect || false"
+                />
+              </mat-form-field>
+              <mat-icon
+                *ngIf="question.isCorrect !== undefined"
+                [class.correct]="question.isCorrect"
+                [class.incorrect]="!question.isCorrect"
+              >
+                {{ question.isCorrect ? 'check_circle' : 'error' }}
+              </mat-icon>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div class="actions" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+        <button mat-raised-button color="primary" (click)="checkAllAnswers()" [disabled]="!canSubmit()">
+          <mat-icon>done_all</mat-icon>
+          Submit Test
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="testCompleted" class="test-results" [@fadeInOut]>
+      <div class="view-toggle">
+        <mat-button-toggle-group [(ngModel)]="currentView">
+          <mat-button-toggle value="score">Score</mat-button-toggle>
+          <mat-button-toggle value="review">Review</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <ng-container *ngIf="currentView === 'score'">
+        <h2>Test Complete!</h2>
+        <div class="score">
+          <mat-icon [color]="getScorePercentage() >= 70 ? 'primary' : 'warn'">
+            {{ getScorePercentage() >= 70 ? 'emoji_events' : 'sentiment_dissatisfied' }}
+          </mat-icon>
+          <span>
+            Your score: {{ score }} out of {{ questions.length }} ({{ getScorePercentage() | number : '1.0-0' }}%)
+          </span>
+        </div>
+
+        <div class="previous-scores" *ngIf="previousScores.length > 0">
+          <h3>Previous Scores</h3>
+          <mat-list>
+            <mat-list-item *ngFor="let record of previousScores">
+              <mat-icon mat-list-icon [color]="record.percentage >= 70 ? 'primary' : 'warn'">
+                {{ record.percentage >= 70 ? 'emoji_events' : 'sentiment_dissatisfied' }}
+              </mat-icon>
+              <div mat-line>
+                Score: {{ record.score }}/{{ record.total }} ({{ record.percentage | number : '1.0-0' }}%)
+              </div>
+              <div mat-line>{{ record.digitCount }} digits, {{ record.questionCount }} questions</div>
+              <div mat-line class="score-date">{{ record.timestamp | date : 'medium' }}</div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="currentView === 'review'">
+        <h2>Review Questions</h2>
+        <div class="questions-review">
+          <div class="question-item" *ngFor="let question of questions; let i = index">
+            <div class="question-number">{{ i + 1 }}.</div>
+            <div class="math-problem" fxLayout="row" fxLayoutAlign="start center">
+              <ng-container *ngFor="let part of question.sequence">
+                <span class="number" *ngIf="part.type === 'number'">{{ part.value }}</span>
+                <span class="operator" *ngIf="part.type === 'operator'">{{ part.value }}</span>
+              </ng-container>
+              <span class="equals">=</span>
+              <span class="user-answer" [class.correct]="question.isCorrect" [class.incorrect]="!question.isCorrect">
+                {{ question.userAnswer || '(no answer)' }}
+              </span>
+              <span class="correct-answer" *ngIf="!question.isCorrect">
+                (Correct: {{ getCorrectAnswer(question) }})
+              </span>
+              <mat-icon [class.correct]="question.isCorrect" [class.incorrect]="!question.isCorrect">
+                {{ question.isCorrect ? 'check_circle' : 'error' }}
+              </mat-icon>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <button mat-raised-button color="primary" (click)="startNewTest()">
+        <mat-icon>replay</mat-icon>
+        Start New Test
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

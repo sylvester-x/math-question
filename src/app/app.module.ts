@@ -12,9 +12,18 @@ import { AddComponent } from './add/add.component';
 import { MinusComponent } from './minus/minus.component';
 import { DivideComponent } from './divide/divide.component';
 import { OnlyNumberDirective } from './_share/directives/only-number.directive';
+import { MixMathComponent } from './mix-math/mix-math.component';
 
 @NgModule({
-  declarations: [AppComponent, MultipleComponent, AddComponent, MinusComponent, DivideComponent, OnlyNumberDirective],
+  declarations: [
+    AppComponent,
+    MultipleComponent,
+    AddComponent,
+    MinusComponent,
+    DivideComponent,
+    OnlyNumberDirective,
+    MixMathComponent
+  ],
   imports: [BrowserModule, AppRoutingModule, BrowserAnimationsModule, MaterialModule, FormsModule, FlexLayoutModule],
   providers: [],
   bootstrap: [AppComponent]
