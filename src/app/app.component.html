@@ -1,0 +1,35 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>Math Practice</span>
+</mat-toolbar>
+
+<mat-sidenav-container hasBackdrop="true">
+  <mat-sidenav #sidenav mode="side" class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/add" (click)="sidenav.toggle()">
+        <mat-icon>add</mat-icon>
+        <span>Add</span>
+      </a>
+      <a mat-list-item routerLink="/minus" (click)="sidenav.toggle()">
+        <mat-icon>remove</mat-icon>
+        <span>Minus</span>
+      </a>
+      <a mat-list-item routerLink="/multiple" (click)="sidenav.toggle()">
+        <mat-icon>close</mat-icon>
+        <span>Multiple</span>
+      </a>
+      <a mat-list-item routerLink="/divide" (click)="sidenav.toggle()">
+        <img src="../assets/images/divide.png" class="mat-icon" />
+        <span>Divide</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="content">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,28 @@
+mat-sidenav-container {
+  height: calc(100vh - 64px);
+}
+
+.sidenav {
+  width: 250px;
+}
+
+.content {
+  padding: 20px;
+}
+
+mat-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+mat-nav-list {
+  a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+.mat-icon {
+  margin-right: 10px;
+}

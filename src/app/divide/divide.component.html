@@ -1,0 +1,71 @@
+<mat-card class="math-card">
+  <mat-card-header>
+    <mat-card-title>Division Practice Test</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="settings" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+      <mat-form-field appearance="outline">
+        <mat-label>Number of Digits</mat-label>
+        <mat-select [(ngModel)]="digitCount" (selectionChange)="onSettingsChange()">
+          <mat-option *ngFor="let count of availableDigits" [value]="count">
+            {{ count }} {{ count === 1 ? 'digit' : 'digits' }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Number of Questions</mat-label>
+        <mat-select [(ngModel)]="questionCount" (selectionChange)="onSettingsChange()">
+          <mat-option *ngFor="let count of availableQuestionCounts" [value]="count"> {{ count }} questions </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="questions-list" *ngIf="!testCompleted">
+      <div class="question-item" *ngFor="let question of questions; let i = index">
+        <div class="question-number">{{ i + 1 }}.</div>
+        <div class="math-problem" fxLayout="row" fxLayoutAlign="start center">
+          <span class="number">{{ question.num1 }}</span>
+          <span class="operator">÷</span>
+          <span class="number">{{ question.num2 }}</span>
+          <span class="equals">=</span>
+          <mat-form-field appearance="outline">
+            <input matInput appOnlyNumber [(ngModel)]="question.userAnswer" [disabled]="question?.isCorrect || false" />
+          </mat-form-field>
+          <mat-icon
+            *ngIf="question.isCorrect !== undefined"
+            [class.correct]="question.isCorrect"
+            [class.incorrect]="!question.isCorrect"
+          >
+            {{ question.isCorrect ? 'check_circle' : 'error' }}
+          </mat-icon>
+        </div>
+      </div>
+
+      <div class="actions" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="16px">
+        <button mat-raised-button color="primary" (click)="checkAllAnswers()" [disabled]="!canSubmit()">
+          <mat-icon>done_all</mat-icon>
+          Submit Test
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="testCompleted" class="test-results" [@fadeInOut]>
+      <h2>Test Complete!</h2>
+      <div class="score">
+        <mat-icon [color]="getScorePercentage() >= 70 ? 'primary' : 'warn'">
+          {{ getScorePercentage() >= 70 ? 'emoji_events' : 'sentiment_dissatisfied' }}
+        </mat-icon>
+        <span
+          >Your score: {{ score }} out of {{ questions.length }} ({{ getScorePercentage() | number : '1.0-0' }}%)</span
+        >
+      </div>
+
+      <button mat-raised-button color="primary" (click)="startNewTest()">
+        <mat-icon>replay</mat-icon>
+        Start New Test
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
