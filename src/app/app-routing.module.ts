@@ -4,6 +4,7 @@ import { DivideComponent } from './divide/divide.component';
 import { MinusComponent } from './minus/minus.component';
 import { MultipleComponent } from './multiple/multiple.component';
 import { AddComponent } from './add/add.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }]
 })
 export class AppRoutingModule {}

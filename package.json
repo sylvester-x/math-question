@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng b --output-path docs --base-href 'https://sylvester-x.github.io/math-question/'",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
